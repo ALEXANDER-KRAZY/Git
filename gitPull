@@ -1,0 +1,7 @@
+#Name GIT Push
+
+git push is used to update remote refs and its objects.
+
+##SYNTAX
+
+git push[--all]

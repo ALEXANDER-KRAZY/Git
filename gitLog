@@ -1,0 +1,15 @@
+#Name
+
+git log used to show commit logs(caches).
+
+this command lists commits reacheable by the parent link from a given commit(s) but excludes commits given with a ^ sign.
+
+Output is given in reverse chronological order by default.
+
+#SYNTAX
+
+git log newupdate oldupdate ^veryoldupdate
+
+**means show all git commits reacheable in new update and oldupdate but not veryoldupdate
+
+
