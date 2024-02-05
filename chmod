@@ -1,0 +1,192 @@
+#CHMOD
+
+##modifying files permissions using the chmod(changemode) command
+
+chmod is used to modify read, write and execute permissions
+
+Permissions are granted upon three creterias: owner, the group and all other
+
+##To view permissions of files in a directory use:
+
+ls -lha
+
+OUTPUT
+drwxr-xr-x 2 owner group 4.0K 2009-08-13 10:16 (*this is how a directory inside this folder will be displayed*)
+-rw-r--r-- 1 owner group 8.1K 2009-07-09 16:23 gitmerge
+lrwxrwxrwx 2 owner group 4.0K 2009-08-13 10:16 gitPull
+
+A way to understand the meaning of this column is to divide the bits into groups:
+
+File Type	User	Group	Global
+d Directory	rwx	r-x	r-x
+- Regular file	rw-	r--	r--
+l Symbolic Link	rwx	rwx	rwx
+
+##Changing File Permissions with chmod
+To change the file permissions using chmod, run chmod PERMISSION DIRECTORY_OR_FILENAME, swapping in the desired file permissions and the directory or file. The owner can change file permissions for any user, group, or others by adding - to remove or + to add certain permissions. These permissions are categorized into read, write, or executable.
+
+The next few sections dive deep into chmod syntax.
+
+##Using Symbolic Notation Syntax with chmod
+The format of a chmod command is:
+
+chmod WHO[+,-,=]PERMISSIONS FILENAME
+
+Consider the following chmod command:
+
+chmod g+w ~/example.txt
+
+This grants write permissions to all members of the usergroup that owns the ~/example.txt file. Other possible options to change permissions of targeted users are:
+
+Who (Letter)	Meaning
+u		user
+g		group
+o		others
+a		all
+The + operator grants permissions whereas the - operator takes away permissions. Copying permissions is also possible using the = operator, for example:
+
+chmod g=u ~/example.txt
+
+The parameter g=u grants the group the same permissions as the user.
+
+Multiple permissions can be specified by separating them with a comma, as in the following example:
+
+chmod g+w,o-rw,a+x ~/example-files/
+
+This adds write permissions to the group members, and removes read and write permissions from the “other” users of the system. Finally the a+x adds the execute permissions to all categories. This value may also be specified as +x. If no category is specified, the permission is added or subtracted to all permission categories. In the following example, all categories are given write permissions with +w:
+
+chmod -R +w,g=rw,o-rw, ~/example-files/
+
+The -R option applies the modification to the permissions recursively to the specified directory and to all of its contents.
+
+##Using Octal Notation Syntax with chmod
+Another method for setting permissions is through octal notation.
+
+Here is example of a file permission that is equivalent to chmod u=rwx,g=rx,o=:
+
+chmod 750 ~/example.txt
+
+The permissions for this file are - rwx r-x ---.
+
+Disregarding the first bit, each bit that is occupied with a - can be replaced with a 0 while r, w, or x is represented by a 1. The resulting conversion is:
+
+111 101 000
+
+This is called octal notation because the binary numbers are converted to base-8 by using the digits 0 to 7:
+
+Binary	Octal	Permission
+000	0	—
+001	1	–x
+010	2	-w-
+011	3	-wx
+100	4	r–
+101	5	r-x
+110	6	rw-
+111	7	rwx
+Each digit is independent of the other two. Therefore, 750 means the current user can read, write, and execute, the group cannot write, and others cannot read, write, or execute.
+
+744 is a typical default permission. It allows read, write, and execute permissions for the owner, read permissions for the group, and read permissions for “other” users.
+
+Either notation is equivalent, and you may choose to use whichever form more clearly expresses your permissions needs.
+
+Examples of Common Permissions with chmod
+chmod 600 (rw-------)
+600 permissions means that only the owner of the file has full read and write access to it. Once a file permission is set to 600, no one else can access the file. Below are example chmod commands in octal and symbolic notions that set permissions to 600:
+
+chmod 600 example.txt
+chmod u=rw,g=,o= example.txt
+chmod a+rwx,u-x,g-rwx,o-rwx example.txt
+
+chmod 664 (rw-rw-r--)
+664 (rw-rw-r--) enables read and write for the owner, read and write for the group, and read for others. If you trust other users within the same group and everyone needs write access to the files, this is a common setting to use. Below are example chmod commands in octal and symbolic notions that set permissions to 664:
+
+chmod 664 example.txt
+chmod u=rw,g=rw,o=r example.txt
+chmod a+rwx,u-x,g-x,o-wx example.txt
+
+chmod 777 (rwxrwxrwx)
+chmod 777 is used to grant permissions to everyone to read, write, and execute. While using these permissions can quickly overcome a permissions-based error, it is not best practice for securing most files and applications. Below are example chmod commands in octal and symbolic notions that set permissions to 777:
+
+chmod 777 example.txt
+chmod u=rwx,g=rwx,o=rwx example.txt
+chmod a=rwx example.txt
+
+##Making a File Executable
+The following example changes the file permissions so that any user can execute the ~/example.py file:
+
+chmod +x ~/example.py
+
+##Restore Default File Permissions
+The default permissions for files on a Unix system are often 600 or 644. Permissions of 600 give the owner full read and write access to the file, but no other user can access it. Alternatively, 644 grants the owner read and write access, while the group members and other system users only have read access.
+
+Issue one of the following chmod commands to reset the permissions back to one of the likely defaults:
+
+chmod 600 ~/example.txt
+
+chmod 644 ~/example.txt
+
+For executable files, the equivalent settings would be 700 and 755 which correspond to 600 and 644 except with execution permission.
+
+Use one of the following examples to achieve these default executable permissions:
+
+chmod 700 ~/example.py
+
+chmod 755 ~/example.py
+
+##Removing File Permissions with chmod
+In order to remove global read and write permissions given to a file, use the following syntax:
+
+chmod o-rw example.txt
+
+Run the following chmod command to remove read and write permissions for the group:
+
+chmod g-rx example.txt
+
+Use the following chmod command to remove read and write permissions from the group, while adding read and write permission for other users:
+
+chmod g-rx, o+rx example.txt
+
+Alternatively, if you wish to remove all permissions for group and others, do so using go=:
+
+chmod go= example.txt
+
+Restrict File Access: Remove all Group and Other Permissions
+There are a number of cases where administrators and users should restrict access to files, particularly files that contain passwords and other sensitive information. The configuration files for msmtp and Fetchmail (~/.msmtprc and ~/.fetchmailrc) are two common examples.
+
+You can remove all access to these files with commands in one of the following forms:
+
+chmod 600 .msmtprc
+
+chmod g-rwx,o-rwx .fetchmail
+
+##Understanding Linux Directory Permissions
+While directory permissions within Linux are similar to file permissions, there are a few key differences regarding how these permissions affect user operations:
+
+Read (r): User can list the items in a directory, such as when using the ls command.
+Write (w): User can add, delete, or rename files in a directory, provided the user also has execute permissions.
+Execute (x): User can navigate to the directory, such as when using the cd command.
+To view permissions of all files and directories within the working directory, run the following command:
+
+ls -la
+
+The output should be similar to the snippet below:
+
+total 12
+drwxr-xr-x 3 user group 4096 Apr 16 12:34 .
+drwxr-xr-x 4 user group 4096 Apr 16 12:33 ..
+drwxr-xr-x 2 user group 4096 Apr 16 12:34 example-directory
+-rw-r--r-- 1 user group    0 Apr 16 12:34 file1.txt
+Directories are differentiated from files by the first bit within the permissions. As covered previously, d stands for directory and - denotes the item is a file.
+
+Permissions on an individual directory can also be viewed using the following command syntax:
+
+ls -dl EXAMPLE_DIRECTORY
+
+How To Change Directory Permissions using chmod
+Directory permissions can be adjusted using the same chmod commands as previously outlined for modifying file permissions. The following example changes permissions on an example directory to 755:
+
+chmod 755 /example-directory/
+
+In many cases, the permissions should also be changed recursively on all files and subdirectories. This can be done through chmod by using the -R option. Run the following command to change all permissions for files within a directory to 644:
+
+sudo chmod -R 644 /var/www/html/

@@ -2,8 +2,10 @@ if you encounter this error:
 
 warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
 
-This is a way of git to ensure that all line endings in your files are as per your operating system farmiliarity.
-To help this error run
+This is a way of git to ensure that all line endings in your files are as per your operating system 
+farmiliarity.
+
+To help this error run:
 
 
 git config --global core .autocrlf true

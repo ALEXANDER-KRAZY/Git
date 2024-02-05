@@ -1,6 +1,6 @@
 #Name
 
-git log used to show commit logs(caches).
+git log is used to show commit logs(caches).
 
 this command lists commits reacheable by the parent link from a given commit(s) but excludes commits given with a ^ sign.
 
