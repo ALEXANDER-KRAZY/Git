@@ -1,8 +1,6 @@
-if you encounter this error:
+# fatal: refusing to merge unrelated histories
 
-fatal: refusing to merge unrelated histories
-
-RUN:
+- RUN:
 
 git pull --allow-unrelated-histories
 

@@ -1,0 +1,20 @@
+# Pushing a local folder as a GitHub repository
+
+Let's say you have a folder with some files you have been working on and its not on your list of Github repositories
+
+First:
+
+Create a Github repository
+
+Then:
+
+Run the following commands in your cli
+
+```bash
+git init
+git add .
+git commit -m "message"
+git branch -M main
+git remote add origin <repoUrl> //replace repoUrl with actual repo link from Github
+git push -u origin main
+```
